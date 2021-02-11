@@ -1,0 +1,286 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#config button,
+#chapter,
+input,
+#area,
+.window-button,
+body {
+    -webkit-app-region: no-drag;
+}
+
+body {
+    background-color: #f0e8d1;
+}
+
+body,
+button,
+input {
+    font-family: Bebas Neue;
+    font-size: 1.2rem;
+}
+
+#app-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+
+#app-name,
+#slider-label,
+#chapter-label {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        1px 1px 0 #000;
+    margin-top: 3px;
+}
+
+#window-button-container {
+    display: flex;
+    width: 150px;
+    height: 34px;
+    margin-top: -2px;
+}
+
+#nav-bar,
+#nav-resize,
+.window-button {
+    background-color: #412c1a;
+}
+
+#nav-bar,
+#nav-resize {
+    height: 30px;
+    width: 100%;
+}
+
+#nav-bar {
+    display: flex;
+    color: #f7e018;
+    justify-content: space-between;
+    user-select: none;
+    -webkit-app-region: drag;
+    position: fixed;
+}
+
+#nav-resize {
+    padding: 2px;
+}
+
+#minimize {
+    position: relative;
+    padding-bottom: 9px;
+}
+
+.window-button {
+    font-family: Arial, sans-serif;
+    color: white;
+    border: none;
+    outline: none;
+    height: 100%;
+    width: 100%;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.window-button:hover {
+    background-color: rgba(240, 232, 209, 0.2);
+}
+
+#page-info,
+#page-btns,
+#slider-container {
+    display: none;
+}
+
+#page-info {
+    color: black;
+}
+
+#main-content {
+    width: 100%;
+    height: 96%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    background-image: url("../imgs/dropFiles.png");
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#pdf-container {
+    height: 100%;
+    display: table;
+}
+
+#pdf-render {
+    display: table-row;
+}
+
+#pdf-render:hover {
+    cursor: text;
+}
+
+#config {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+#page-num {
+    width: 32px;
+    height: 20px;
+    outline: none;
+    border: none;
+    background-color: #f0e8d1;
+    text-align: center;
+    border-bottom: 1px solid black;
+}
+
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+#slider {
+    -webkit-appearance: none;
+    outline: none;
+    background-color: rgba(65, 44, 26, 0.2);
+    border-radius: 10px;
+    width: 80px;
+    padding: 1px;
+}
+
+#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+    background: #f7e018;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#slider::-webkit-slider-thumb:hover {
+    background: black;
+}
+
+#page-btns button {
+    font-size: 12px;
+}
+
+#slider-container {
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+#chapter {
+    width: 20px;
+    outline: none;
+    border: 1px solid black;
+    background-color: #f7e018;
+    color: black;
+}
+
+#chapter:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+#chapter option {
+    color: black;
+    background-color: white;
+    font-family: Bebas Neue;
+    font-size: 1.2rem;
+}
+
+#chapter-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+@media (max-width: 600px) {
+    label {
+        position: absolute;
+        opacity: 0;
+        margin-left: 999px;
+    }
+    #config {
+        width: 550px;
+        gap: 20px;
+    }
+    #slider {
+        width: 60px;
+    }
+}
+
+#config button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+#config button {
+    background-color: #f7e018;
+    color: black;
+    border: 1px solid black;
+    font-family: Bebas Neue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    height: 80%;
+    padding: 5px;
+}
+
+#main-content::-webkit-scrollbar {
+    width: 10px;
+}
+#main-content::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0);
+}
+#main-content::-webkit-scrollbar-thumb {
+    background-color: rgba(65, 44, 26, 0.2);
+    width: 10px;
+    border-radius: 6px;
+    background-clip: content-box;
+}
+#main-content::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#main-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(65, 44, 26, 0.4);
+}
+
+.window-rendered {
+    background-color: #f0e8d1;
+    color: black;
+}
+
+.window-rendered:hover {
+    background-color: rgba(65, 44, 26, 0.2);
+}
+
+#close:hover {
+    background-color: rgba(255, 0, 0, 0.7);
+}
