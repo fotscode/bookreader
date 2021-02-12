@@ -225,7 +225,7 @@ label {
     overflow-x: hidden;
     display: flex;
     justify-content: center;
-    background-image: url("../imgs/dropFiles.png");
+    background-image: url("../imgs/dropFile.svg");
     background-size: 50%;
     background-repeat: no-repeat;
     background-position: center;

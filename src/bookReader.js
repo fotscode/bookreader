@@ -62,7 +62,7 @@ function checkExtensionAndRender(path) {
         renderEPUB(path);
     } else {
         document.getElementById("main-content").style.backgroundImage =
-            "url('imgs/error.png')";
+            "url('imgs/error.svg')";
     }
 }
 
