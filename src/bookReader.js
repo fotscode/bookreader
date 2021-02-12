@@ -68,15 +68,19 @@ function checkExtensionAndRender(path) {
 
 function fillSelectWithFiles(elements) {
     dataJSON = elements.target.response;
-    let history = JSON.parse(elements.target.response);
+    if (dataJSON !== "{}") {
+        let history = JSON.parse(dataJSON);
+        let select = document.getElementById("selector");
+        // displays them
+        document.getElementById("selector-label").style.display = "inline";
+        selector.style.display = "inline";
 
-    let select = document.getElementById("selector");
-
-    for (fileName in history) {
-        select.options[select.options.length] = new Option(
-            fileName,
-            history[fileName].path
-        );
+        for (fileName in history) {
+            select.options[select.options.length] = new Option(
+                fileName,
+                history[fileName].path
+            );
+        }
     }
 }
 

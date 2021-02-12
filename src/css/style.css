@@ -152,6 +152,11 @@ label {
     background: black;
 }
 
+#selector,
+#selector-label {
+    display: none;
+}
+
 #selector {
     width: 20px;
     outline: none;
