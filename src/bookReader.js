@@ -1,5 +1,6 @@
 const { remote } = require("electron");
 
+// pdf variables
 var pageNum = 1;
 var pageIsRendering = false;
 var pageNumIsPending = null;
@@ -7,40 +8,32 @@ var scale = 1;
 var isPdf = false;
 var pdfDoc;
 
+// epub variables
 var book = null,
     globalPath,
     rendition;
 
-var file;
-
 // using browse button
-function openAndRender() {
+openAndRender = () => {
     let input = document.createElement("input");
     input.type = "file";
 
     input.onchange = (e) => {
-        file = e.target.files[0];
-        if (file.path.endsWith(".pdf") || file.path.endsWith(".epub"))
-            setDefaultValues();
-        if (file.path.endsWith(".pdf")) {
-            renderPDF(file.path);
-        } else if (file.path.endsWith(".epub")) {
-            renderEPUB(file.path);
-        } else {
-            alert("Unknown file type");
-        }
+        let file = e.target.files[0];
+        checkExtensionAndRender(file.path);
     };
 
     input.click();
-}
+};
 
-// allows dropping files onto the app
 window.onload = () => {
-    var getJSONDataReq = new XMLHttpRequest();
-    getJSONDataReq.onload = fillSelect;
-    getJSONDataReq.open("get", "history.json", true);
-    getJSONDataReq.send();
+    // requests JSON local file
+    let reqJSONData = new XMLHttpRequest();
+    reqJSONData.onload = fillSelectWithFiles;
+    reqJSONData.open("get", "history.json", true);
+    reqJSONData.send();
 
+    // allows dropping files onto the app
     const dropArea = document.getElementById("main-content");
 
     dropArea.ondragover = function (e) {
@@ -49,43 +42,38 @@ window.onload = () => {
 
     dropArea.ondrop = function (e) {
         e.preventDefault();
-        file = e.dataTransfer.files[0];
-        let path = file.path;
-        console.log(path);
-        setDefaultValues();
-
-        if (path.endsWith(".pdf")) {
-            renderPDF(path);
-        } else if (path.endsWith(".epub")) {
-            renderEPUB(path);
-        } else {
-            alert("Unknown file type");
-        }
+        let file = e.dataTransfer.files[0];
+        checkExtensionAndRender(file.path);
     };
 };
 
-function fillSelect(elements) {
+function checkExtensionAndRender(path) {
+    if (path.endsWith(".pdf") || path.endsWith(".epub")) setDefaultValues();
+    if (path.endsWith(".pdf")) {
+        renderPDF(path);
+    } else if (path.endsWith(".epub")) {
+        renderEPUB(path);
+    } else {
+        document.getElementById("main-content").style.backgroundImage =
+            "url('imgs/error.png')";
+    }
+}
+
+function fillSelectWithFiles(elements) {
     dataJSON = elements.target.response;
     let history = JSON.parse(elements.target.response);
 
-    let select = document.getElementById("chapter");
+    let select = document.getElementById("selector");
 
-    for (key in history) {
+    for (fileName in history) {
         select.options[select.options.length] = new Option(
-            key,
-            history[key].path
+            fileName,
+            history[fileName].path
         );
     }
 }
 
-function getFileName(path) {
-    let str = path.split("\\");
-    str = str[str.length - 1].replace(".epub", "");
-    str = str.replace(".pdf", "");
-    return str;
-}
-
-// clears previous elements and displays what's needed in both filetypes, PDF and EPUB
+// clears previous elements and displays what's needed, both for PDF and EPUB
 function setDefaultValues() {
     document.getElementById("page-btns").style.display = "flex";
     document.getElementById("slider-container").style.display = "flex";
@@ -106,7 +94,7 @@ function setDefaultValues() {
     }
 }
 
-// renders PDF page
+// PDF Section
 const renderPage = (num) => {
     pageIsRendering = true;
 
@@ -130,15 +118,15 @@ const renderPage = (num) => {
         });
 
         // output current page
-        document.querySelector("#page-num").value = num;
+        document.getElementById("page-num").value = num;
     });
 };
 
 function renderPDF(path) {
+    // configures DOM for PDF type
     DOMPDFsettings();
     remote.BrowserWindow.getFocusedWindow().setTitle(getFileName(path));
     isPdf = true;
-    console.log(document.getElementById("chapter"));
     pageNum = 1;
     pageIsRendering = false;
     pageNumIsPending = null;
@@ -146,17 +134,37 @@ function renderPDF(path) {
     // get Document
     pdfjsLib.getDocument(path).promise.then((pdfDoc_) => {
         pdfDoc = pdfDoc_;
-        document.querySelector("#page-count").textContent = pdfDoc.numPages;
+        document.getElementById("page-count").textContent = pdfDoc.numPages;
         renderPage(pageNum);
     });
 }
+
+function DOMPDFsettings() {
+    book = null;
+    document.getElementById("app-name").innerText = "PDF";
+    document.getElementById("main-content").style.overflowY = "scroll";
+    document.getElementById("selector-label").style.display = "none";
+    document.getElementById("selector").style.display = "none";
+    document.getElementById("slider-label").innerText = "SCALE";
+    document.getElementById("page-info").style.display = "inline";
+}
+
+// handle specific page | PDF only
+handlePage = () => {
+    let num = event.target.value;
+    if (num < 1 || num > pdfDoc.numPages) return;
+    pageNum = parseInt(num);
+    queueRenderPage(pageNum);
+};
+
+// EPUB Section
 
 function renderEPUB(path) {
     DOMEPUBsettings();
     globalPath = path;
     remote.BrowserWindow.getFocusedWindow().setTitle(getFileName(path));
-    const selectObject = document.getElementById("chapter");
-    const savedCfi = displaySavedBook(globalPath);
+    const selectObject = document.getElementById("selector");
+    const savedCfi = getSavedCFI(globalPath);
     removeOptions(selectObject);
     if (isPdf) removePDF();
 
@@ -178,14 +186,16 @@ function renderEPUB(path) {
         p: { color: "#412c1a !important" },
     });
 
-    // navigation in dropdown
+    // navigation index in dropdown
     book.loaded.navigation.then(function (toc) {
-        var options = {};
+        var tableOfContents = {};
         var addTocItems = function (tocItems) {
             tocItems.forEach(function (chapter) {
                 let chapterLabel = chapter.label.replace(/[\n]/g, "");
                 let chapterHREF = chapter.href.replace("%21", "!");
-                options[chapterLabel] = chapterHREF.replace(/[\n]/g, "").trim();
+                tableOfContents[chapterLabel] = chapterHREF
+                    .replace(/[\n]/g, "")
+                    .trim();
                 if (chapter.subitems) {
                     addTocItems(chapter.subitems);
                 }
@@ -193,33 +203,21 @@ function renderEPUB(path) {
         };
         addTocItems(toc);
 
-        // fills nav options
-        for (var x in options) {
+        // fills select options with chapter name and cfi
+        for (chapter in tableOfContents) {
             selectObject.options[selectObject.options.length] = new Option(
-                x,
-                options[x]
+                chapter,
+                tableOfContents[chapter]
             );
         }
     });
 }
 
-// functions that change DOM depending which content is loaded
-
-function DOMPDFsettings() {
-    book = null;
-    document.getElementById("app-name").innerText = "PDF";
-    document.getElementById("main-content").style.overflowY = "scroll";
-    document.getElementById("chapter-label").style.display = "none";
-    document.getElementById("chapter").style.display = "none";
-    document.getElementById("slider-label").innerText = "SCALE";
-    document.getElementById("page-info").style.display = "inline";
-}
-
 function DOMEPUBsettings() {
     document.getElementById("app-name").innerText = "EPUB";
     document.getElementById("main-content").style.overflowY = "hidden";
-    document.getElementById("chapter-label").innerText = "CHAPTER";
-    document.getElementById("chapter").style.display = "inline";
+    document.getElementById("selector-label").innerText = "CHAPTER";
+    document.getElementById("selector").style.display = "inline";
     document.getElementById("slider-label").innerText = "FONT-SIZE";
     document.getElementById("slider").value = "16";
     document.getElementById("page-info").style.display = "none";
@@ -227,41 +225,46 @@ function DOMEPUBsettings() {
 
 function removePDF() {
     isPdf = false;
-    const canvas = document.querySelector("#pdf-render");
-    const context = canvas.getContext("2d");
     pdfDoc = null;
+    let canvas = document.querySelector("#pdf-render");
+    let context = canvas.getContext("2d");
     canvas.height = 0;
     canvas.width = 0;
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// removes options from the dropdown
+// removes options from the dropdown | EPUB only
 
 function removeOptions(selectElement) {
-    var i,
-        L = selectElement.options.length - 1;
-    for (i = L; i >= 0; i--) {
+    let maxIndex = selectElement.options.length - 1;
+    for (let i = maxIndex; i >= 0; i--) {
         selectElement.remove(i);
     }
 }
 
-// displays chapter selected from dropdown
+// displays book/chapter selected from dropdown | EPUB only
 
-function handleSelected() {
-    let selectObject = document.getElementById("chapter");
+handleSelected = () => {
+    let selectObject = document.getElementById("selector");
     if (book === null) {
-        setDefaultValues();
-        renderEPUB(selectObject[selectObject.selectedIndex].value);
+        checkExtensionAndRender(selectObject[selectObject.selectedIndex].value); //  selectObject[selectObject.selectedIndex].value = path
     } else {
-        rendition.display(selectObject[selectObject.selectedIndex].value);
+        rendition.display(selectObject[selectObject.selectedIndex].value); // selectObject[selectObject.selectedIndex].value = cfi
     }
+};
+
+function getFileName(path) {
+    let str = path.split("\\");
+    str = str[str.length - 1].replace(".epub", "");
+    str = str.replace(".pdf", "");
+    return str;
 }
 
-function displaySavedBook(path) {
-    let parse = JSON.parse(dataJSON);
-    for (log in parse) {
-        if (log === getFileName(path)) {
-            return parse[log].cfi;
+function getSavedCFI(path) {
+    let history = JSON.parse(dataJSON);
+    for (fileName in history) {
+        if (fileName === getFileName(path)) {
+            return history[fileName].cfi;
         }
     }
 }
@@ -293,14 +296,6 @@ const showNextPage = () => {
     } else {
         rendition.next();
     }
-};
-
-// handle specific page | PDF only
-handlePage = () => {
-    let num = event.target.value;
-    if (num < 1 || num > pdfDoc.numPages) return;
-    pageNum = parseInt(num);
-    queueRenderPage(pageNum);
 };
 
 // handle specific scale
@@ -345,10 +340,6 @@ var kbEvents = function (e) {
                 showNextPage();
             }
             break;
-        case "ArrowRight":
-            e.preventDefault();
-            showNextPage();
-            break;
         case "PageUp":
             e.preventDefault();
             if (isPdf) {
@@ -357,6 +348,10 @@ var kbEvents = function (e) {
             } else {
                 showPrevPage();
             }
+            break;
+        case "ArrowRight":
+            e.preventDefault();
+            showNextPage();
             break;
         case "ArrowLeft":
             e.preventDefault();
@@ -405,14 +400,11 @@ var kbEvents = function (e) {
                 slider.value *= 0.9;
                 setFontSizes();
             }
-
             break;
         default:
             break;
     }
 };
-
-// zoom in, zoom out using ctrl+ and ctrl- respectively
 
 // mouse4 and mouse5 event listeners for changing pages
 
@@ -431,9 +423,14 @@ handleMinimize = () => {
     remote.BrowserWindow.getFocusedWindow().minimize();
 };
 
+handleMaximize = () => {
+    let window = remote.BrowserWindow.getFocusedWindow();
+    window.isMaximized() ? window.unmaximize() : window.maximize();
+};
+
 handleClose = () => {
     if (book !== null) {
-        saveFileHistory();
+        saveCFI();
     } else if (isPdf) {
         remote.BrowserWindow.getFocusedWindow().reload();
     } else {
@@ -441,20 +438,15 @@ handleClose = () => {
     }
 };
 
-handleMaximize = () => {
-    let window = remote.BrowserWindow.getFocusedWindow();
-    window.isMaximized() ? window.unmaximize() : window.maximize();
-};
-
-function saveFileHistory() {
-    historyArray = JSON.parse(dataJSON);
+function saveCFI() {
+    history = JSON.parse(dataJSON);
     let actualCfi = rendition.location.start.cfi;
-    historyArray[getFileName(globalPath)] = {
+    history[getFileName(globalPath)] = {
         path: globalPath,
         cfi: actualCfi,
     };
 
-    var fs = require("fs");
+    let fs = require("fs");
     fs.writeFile(
         "src/history.json",
         JSON.stringify(historyArray),

@@ -1,5 +1,5 @@
 {
-  "name": "electron-pdfreader",
+  "name": "electron-bookreader",
   "version": "1.0.0",
   "description": "",
   "main": "src/js/main.js",
