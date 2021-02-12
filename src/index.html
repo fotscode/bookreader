@@ -13,10 +13,10 @@
         <nav id="nav-bar">
             <div id="app-name">EPUB/PDF</div>
             <div id="config">
-                <div id="chapter-section">
-                    <label for="chapter" id="chapter-label">SAVED FILES</label>
-                    <select name="chapter" id="chapter" onchange="handleSelected()">
-                        <option value="" selected="selected" hidden>Chapter</option>
+                <div id="selector-section">
+                    <label for="selector" id="selector-label">SAVED FILES</label>
+                    <select name="selector" id="selector" onchange="handleSelected()">
+                        <option value="" selected="selected" hidden></option>
                     </select>                    
                 </div>
 
@@ -56,7 +56,7 @@
     <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
-    <script src="pdfReader.js"></script>
+    <script src="bookReader.js"></script>
 </body>
 </html>
 
