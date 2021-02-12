@@ -15,6 +15,7 @@ if (process.env.NODE_ENV !== "production") {
 
 app.on("ready", () => {
     mainWindow = new BrowserWindow({
+        title: "Book Reader",
         icon: "src/imgs/books.png",
         frame: false,
         minWidth: 500,
@@ -31,7 +32,6 @@ app.on("ready", () => {
             slashes: true,
         })
     );
-
     const mainMenu = Menu.buildFromTemplate(templateMenu);
     Menu.setApplicationMenu(mainMenu);
 });
@@ -50,7 +50,12 @@ if (process.env.NODE_ENV !== "production") {
                 },
             },
             {
-                role: "reload",
+                label: "reload",
+                accelerator: "CommandOrControl+R",
+                click(item, focusedWindow) {
+                    focusedWindow.setTitle("Book Reader");
+                    focusedWindow.reload();
+                },
             },
         ],
     });
