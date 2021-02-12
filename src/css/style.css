@@ -11,12 +11,18 @@ body {
 }
 
 #config button,
-#chapter,
+#selector,
 input,
 #area,
 .window-button,
 body {
     -webkit-app-region: no-drag;
+}
+
+#page-num::-webkit-inner-spin-button,
+#slider::-webkit-slider-thumb,
+#slider {
+    -webkit-appearance: none;
 }
 
 body {
@@ -25,31 +31,21 @@ body {
 
 body,
 button,
-input {
+input,
+option {
     font-family: Bebas Neue;
     font-size: 1.2rem;
 }
 
 #app-name {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 10px;
+    padding: 2px 10px;
 }
 
 #app-name,
-#slider-label,
-#chapter-label {
+label {
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
         1px 1px 0 #000;
     margin-top: 3px;
-}
-
-#window-button-container {
-    display: flex;
-    width: 150px;
-    height: 34px;
-    margin-top: -2px;
 }
 
 #nav-bar,
@@ -77,9 +73,116 @@ input {
     padding: 2px;
 }
 
-#minimize {
-    position: relative;
-    padding-bottom: 9px;
+#config {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+#config button {
+    background-color: #f7e018;
+    color: black;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    height: 80%;
+    padding: 5px;
+}
+
+#config button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+#page-info,
+#page-btns,
+#slider-container {
+    display: none;
+}
+
+#page-btns button {
+    font-size: 12px;
+}
+
+#page-num {
+    width: 32px;
+    height: 20px;
+    outline: none;
+    border: none;
+    background-color: #f0e8d1;
+    text-align: center;
+    border-bottom: 1px solid black;
+}
+
+#page-info {
+    color: black;
+}
+
+#slider-container {
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+#slider {
+    outline: none;
+    background-color: rgba(65, 44, 26, 0.2);
+    border-radius: 10px;
+    width: 80px;
+    padding: 1px;
+}
+
+#slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+    background: #f7e018;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#slider::-webkit-slider-thumb:hover {
+    background: black;
+}
+
+#selector {
+    width: 20px;
+    outline: none;
+    border: 1px solid black;
+    background-color: #f7e018;
+    color: black;
+}
+
+#selector:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+#selector option {
+    color: black;
+    background-color: white;
+}
+
+#selector-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+#window-button-container {
+    display: flex;
+    width: 150px;
+    height: 34px;
+    margin-top: -2px;
 }
 
 .window-button {
@@ -97,14 +200,22 @@ input {
     background-color: rgba(240, 232, 209, 0.2);
 }
 
-#page-info,
-#page-btns,
-#slider-container {
-    display: none;
+.window-rendered {
+    background-color: #f0e8d1;
+    color: black;
 }
 
-#page-info {
-    color: black;
+.window-rendered:hover {
+    background-color: rgba(65, 44, 26, 0.2);
+}
+
+#minimize {
+    position: relative;
+    padding-bottom: 9px;
+}
+
+#close:hover {
+    background-color: rgba(255, 0, 0, 0.7);
 }
 
 #main-content {
@@ -133,89 +244,19 @@ input {
     cursor: text;
 }
 
-#config {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    width: 100%;
+#main-content::-webkit-scrollbar {
+    width: 10px;
 }
 
-#page-num {
-    width: 32px;
-    height: 20px;
-    outline: none;
-    border: none;
-    background-color: #f0e8d1;
-    text-align: center;
-    border-bottom: 1px solid black;
-}
-
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-}
-
-#slider {
-    -webkit-appearance: none;
-    outline: none;
+#main-content::-webkit-scrollbar-thumb {
     background-color: rgba(65, 44, 26, 0.2);
-    border-radius: 10px;
-    width: 80px;
-    padding: 1px;
+    width: 10px;
+    border-radius: 6px;
+    background-clip: content-box;
 }
 
-#slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    border: 1px solid black;
-    background: #f7e018;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-#slider::-webkit-slider-thumb:hover {
-    background: black;
-}
-
-#page-btns button {
-    font-size: 12px;
-}
-
-#slider-container {
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-}
-
-#chapter {
-    width: 20px;
-    outline: none;
-    border: 1px solid black;
-    background-color: #f7e018;
-    color: black;
-}
-
-#chapter:hover {
-    cursor: pointer;
-    background-color: black;
-    color: white;
-}
-
-#chapter option {
-    color: black;
-    background-color: white;
-    font-family: Bebas Neue;
-    font-size: 1.2rem;
-}
-
-#chapter-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
+#main-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(65, 44, 26, 0.4);
 }
 
 @media (max-width: 600px) {
@@ -231,56 +272,4 @@ input::-webkit-inner-spin-button {
     #slider {
         width: 60px;
     }
-}
-
-#config button:hover {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-}
-
-#config button {
-    background-color: #f7e018;
-    color: black;
-    border: 1px solid black;
-    font-family: Bebas Neue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    outline: none;
-    height: 80%;
-    padding: 5px;
-}
-
-#main-content::-webkit-scrollbar {
-    width: 10px;
-}
-#main-content::-webkit-scrollbar-corner {
-    background: rgba(0, 0, 0, 0);
-}
-#main-content::-webkit-scrollbar-thumb {
-    background-color: rgba(65, 44, 26, 0.2);
-    width: 10px;
-    border-radius: 6px;
-    background-clip: content-box;
-}
-#main-content::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0);
-}
-
-#main-content::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(65, 44, 26, 0.4);
-}
-
-.window-rendered {
-    background-color: #f0e8d1;
-    color: black;
-}
-
-.window-rendered:hover {
-    background-color: rgba(65, 44, 26, 0.2);
-}
-
-#close:hover {
-    background-color: rgba(255, 0, 0, 0.7);
 }
