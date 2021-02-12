@@ -323,19 +323,16 @@ const setFontSizes = () => {
 // key listeners for better user experience
 
 var kbEvents = function (e) {
-    let pdfContainer = document.getElementById("main-content");
-    let scroll = pdfContainer.scrollHeight / 3;
+    let pdf = document.getElementById("main-content");
+    let scroll = pdf.scrollHeight / 3;
     let slider = document.getElementById("slider");
     switch (e.key) {
         case "PageDown":
             e.preventDefault();
             if (isPdf) {
-                if (
-                    pdfContainer.scrollHeight - pdfContainer.scrollTop ===
-                    pdfContainer.clientHeight
-                )
+                if (pdf.scrollHeight - pdf.scrollTop === pdf.clientHeight)
                     showNextPage();
-                else pdfContainer.scrollTop += 9999;
+                else pdf.scrollTop += 9999;
             } else {
                 showNextPage();
             }
@@ -343,8 +340,8 @@ var kbEvents = function (e) {
         case "PageUp":
             e.preventDefault();
             if (isPdf) {
-                if (pdfContainer.scrollTop === 0) showPrevPage();
-                else pdfContainer.scrollTop -= 9999;
+                if (pdf.scrollTop === 0) showPrevPage();
+                else pdf.scrollTop -= 9999;
             } else {
                 showPrevPage();
             }
@@ -360,12 +357,12 @@ var kbEvents = function (e) {
         case "ArrowDown":
             e.preventDefault();
             if (!isPdf) return;
-            pdfContainer.scrollTop += scroll;
+            pdf.scrollTop += scroll;
             break;
         case "ArrowUp":
             e.preventDefault();
             if (!isPdf) return;
-            pdfContainer.scrollTop -= scroll;
+            pdf.scrollTop -= scroll;
             break;
         case "Home":
             e.preventDefault();
@@ -430,8 +427,10 @@ handleMaximize = () => {
 
 handleClose = () => {
     if (book !== null) {
+        remote.BrowserWindow.getFocusedWindow().setTitle("Book Reader");
         saveCFI();
     } else if (isPdf) {
+        remote.BrowserWindow.getFocusedWindow().setTitle("Book Reader");
         remote.BrowserWindow.getFocusedWindow().reload();
     } else {
         remote.BrowserWindow.getFocusedWindow().close();
@@ -439,17 +438,16 @@ handleClose = () => {
 };
 
 function saveCFI() {
-    history = JSON.parse(dataJSON);
+    historyLogs = JSON.parse(dataJSON);
     let actualCfi = rendition.location.start.cfi;
-    history[getFileName(globalPath)] = {
+    historyLogs[getFileName(globalPath)] = {
         path: globalPath,
         cfi: actualCfi,
     };
-
     let fs = require("fs");
     fs.writeFile(
         "src/history.json",
-        JSON.stringify(historyArray),
+        JSON.stringify(historyLogs),
         function (err) {
             if (err) {
                 console.log(err);
