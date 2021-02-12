@@ -89,7 +89,7 @@ function setDefaultValues() {
     document.getElementById("page-btns").style.display = "flex";
     document.getElementById("slider-container").style.display = "flex";
     document.getElementById("main-content").style.backgroundSize = "0";
-    document.getElementById("area").innerHTML = ""; // removes epub
+    document.getElementById("epub-area").innerHTML = ""; // removes epub
 
     // adds event listeners
     document.addEventListener("keydown", kbEvents, false);
@@ -181,8 +181,8 @@ function renderEPUB(path) {
 
     book = ePub(path);
 
-    // designates area where it should be rendered and dimensions
-    rendition = book.renderTo("area", {
+    // designates epub-area where it should be rendered and dimensions
+    rendition = book.renderTo("epub-area", {
         width: "90vw", // 90vw
         height: "96vh", // 96vh
     });
