@@ -1,6 +1,12 @@
+// electron remote for setting titles and reloading, minimizing,
+// maximizing or closing app
 const { remote } = require("electron");
 
 // pdf variables
+var pdfjsLib = require("pdfjs-dist/build/pdf.js");
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "../node_modules/pdfjs-dist/build/pdf.worker.js";
+
 var pageNum = 1;
 var pageIsRendering = false;
 var pageNumIsPending = null;
@@ -9,6 +15,7 @@ var isPdf = false;
 var pdfDoc;
 
 // epub variables
+var ePub = require("epubjs/dist/epub.js");
 var book = null,
     globalPath,
     rendition;
