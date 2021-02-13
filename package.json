@@ -2,15 +2,17 @@
   "name": "electron-bookreader",
   "version": "1.0.0",
   "description": "",
-  "main": "src/js/main.js",
+  "main": "src/main.js",
   "scripts": {
-    "start": "electron src/main.js"
+    "start": "electron src/main.js",
+    "build": "electron-packager . bookReader --icon=src/imgs/books.ico"
   },
   "keywords": [],
-  "author": "",
+  "author": "fots",
   "license": "ISC",
   "dependencies": {
     "electron": "^11.2.2",
+    "electron-packager": "^15.2.0",
     "electron-reload": "^1.5.0",
     "epubjs": "^0.3.88",
     "jszip": "^3.6.0",

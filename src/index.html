@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Reader</title>
-    <script src="https://kit.fontawesome.com/903380383c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div id="nav-resize">
@@ -25,10 +23,10 @@
                 </button>
                 <div id="page-btns">
                     <button id="prev-page" onclick="showPrevPage()">
-                        <i class="fas fa-arrow-left"></i>
+                        <span class="page-btn page-left-arrow"></span>
                     </button>
                     <button id="next-page" onclick="showNextPage()">
-                        <i class="fas fa-arrow-right"></i>
+                        <span class="page-btn page-right-arrow"></span>                        
                     </button>
                 </div>
                 <span id="page-info">
@@ -40,9 +38,9 @@
                 </div>
             </div>
             <div id="window-button-container">
-                <button id="minimize" class="window-button" onclick="handleMinimize()"><i class="far fa-window-minimize"></i></button>
-                <button id="maximize" class="window-button" onclick="handleMaximize()"><i class="far fa-clone"></i></button>
-                <button id="close" class="window-button" onclick="handleClose()">X</button>
+                <button id="minimize" class="window-button" onclick="handleMinimize()"><span class="icon icon-minimize"></span></button>
+                <button id="maximize" class="window-button" onclick="handleMaximize()"><span class="icon icon-maximize"></span></button>
+                <button id="close" class="window-button" onclick="handleClose()"><span class="icon icon-close"></span></button>
             </div>
         </nav>
     </div>

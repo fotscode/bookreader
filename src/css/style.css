@@ -83,13 +83,18 @@ label {
 
 #config button {
     background-color: #f7e018;
+    box-shadow: 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000,
+        -1px 1px 0 #000;
     color: black;
-    border: 1px solid black;
+    border: none;
     display: flex;
     justify-content: center;
     align-items: center;
     outline: none;
     height: 80%;
+}
+
+.new-file {
     padding: 5px;
 }
 
@@ -106,7 +111,35 @@ label {
 }
 
 #page-btns button {
-    font-size: 12px;
+    height: 22px;
+    width: 22px;
+}
+
+.page-btn {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 22px;
+}
+
+.page-right-arrow {
+    background-image: url("../imgs/rightArrow.svg");
+    background-size: 55%;
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+}
+
+.page-left-arrow {
+    background-image: url("../imgs/leftArrow.svg");
+    background-size: 55%;
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+}
+
+.page-btn:hover {
+    filter: invert(100%);
 }
 
 #page-num {
@@ -185,20 +218,49 @@ label {
 
 #window-button-container {
     display: flex;
-    width: 150px;
+    width: 140px;
     height: 34px;
     margin-top: -2px;
 }
 
 .window-button {
     font-family: Arial, sans-serif;
-    color: white;
     border: none;
     outline: none;
-    height: 100%;
-    width: 100%;
-    font-size: 12px;
     cursor: pointer;
+    width: 46px;
+}
+
+.icon {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    filter: invert(100%);
+}
+
+.icon-minimize {
+    background-image: url("../imgs/minimize.svg");
+    margin-bottom: 4px;
+    height: 1.2px;
+    width: 12px;
+}
+
+.icon-maximize {
+    background-image: url("../imgs/maximize.svg");
+    background-repeat: no-repeat;
+    height: 11px;
+    width: 11px;
+}
+
+.icon-close {
+    background-image: url("../imgs/close.svg");
+    background-repeat: no-repeat;
+    height: 11px;
+    width: 11px;
+}
+
+.icon-rendered {
+    filter: initial;
 }
 
 .window-button:hover {
@@ -212,11 +274,6 @@ label {
 
 .window-rendered:hover {
     background-color: rgba(65, 44, 26, 0.2);
-}
-
-#minimize {
-    position: relative;
-    padding-bottom: 9px;
 }
 
 #close:hover {

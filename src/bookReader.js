@@ -99,9 +99,11 @@ function setDefaultValues() {
     document.getElementById("nav-resize").style.backgroundColor = "#f0e8d1";
     document.getElementById("nav-bar").style.backgroundColor = "#f0e8d1";
     let options = document.querySelectorAll(".window-button");
+    let icons = document.querySelectorAll(".icon");
 
     for (let i = 0; i < options.length; i++) {
         options[i].classList.add("window-rendered");
+        icons[i].classList.add("icon-rendered");
     }
 }
 

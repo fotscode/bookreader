@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== "production") {
 app.on("ready", () => {
     mainWindow = new BrowserWindow({
         title: "Book Reader",
-        icon: "src/imgs/books.png",
+        icon: "src/imgs/books.ico",
         frame: false,
         minWidth: 500,
         minHeight: 500,
