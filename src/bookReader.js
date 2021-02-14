@@ -177,7 +177,7 @@ function renderEPUB(path) {
     globalPath = path;
     remote.BrowserWindow.getFocusedWindow().setTitle(getFileName(path));
     const selectObject = document.getElementById("selector");
-    const savedCfi = getSavedCFI(globalPath);
+    const savedCfi = getSavedCFI(path);
     removeOptions(selectObject);
     if (isPdf) removePDF();
 
@@ -185,14 +185,20 @@ function renderEPUB(path) {
 
     // designates epub-area where it should be rendered and dimensions
     rendition = book.renderTo("epub-area", {
-        width: "90vw", // 90vw
-        height: "96vh", // 96vh
+        width: "90vw",
+        height: "96vh",
     });
 
     rendition.display(savedCfi);
 
     rendition.on("keydown", kbEvents, false);
     rendition.on("mouseup", mouseEvents, false);
+
+    rendition.on("relocated", () => {
+        let chapterLoc = rendition.location.start.displayed;
+        document.getElementById("epub-num").innerText = chapterLoc.page;
+        document.getElementById("epub-length").innerText = chapterLoc.total;
+    });
 
     // changes default p color
     rendition.themes.default({
@@ -231,6 +237,7 @@ function DOMEPUBsettings() {
     document.getElementById("main-content").style.overflowY = "hidden";
     document.getElementById("selector-label").innerText = "CHAPTER";
     document.getElementById("selector").style.display = "inline";
+    document.getElementById("epub-info").style.display = "inline";
     document.getElementById("slider-label").innerText = "FONT-SIZE";
     document.getElementById("slider").value = "16";
     document.getElementById("page-info").style.display = "none";
@@ -457,14 +464,12 @@ function saveCFI() {
         path: globalPath,
         cfi: actualCfi,
     };
+    let path = require("path");
+    let absolutePath = path.join(__dirname, "/./history.json");
     let fs = require("fs");
-    fs.writeFile(
-        "src/history.json",
-        JSON.stringify(historyLogs),
-        function (err) {
-            if (err) {
-                console.log(err);
-            }
+    fs.writeFile(absolutePath, JSON.stringify(historyLogs), function (err) {
+        if (err) {
+            console.log(err);
         }
-    );
+    });
 }

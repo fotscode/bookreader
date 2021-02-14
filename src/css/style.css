@@ -1,3 +1,8 @@
+@font-face {
+    font-family: BebasNeue;
+    src: url(../font/BebasNeue-Regular.ttf);
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -33,12 +38,12 @@ body,
 button,
 input,
 option {
-    font-family: Bebas Neue;
+    font-family: BebasNeue;
     font-size: 1.2rem;
 }
 
 #app-name {
-    padding: 2px 10px;
+    padding: 1px 10px;
 }
 
 #app-name,
@@ -106,7 +111,8 @@ label {
 
 #page-info,
 #page-btns,
-#slider-container {
+#slider-container,
+#epub-info {
     display: none;
 }
 
@@ -152,8 +158,14 @@ label {
     border-bottom: 1px solid black;
 }
 
-#page-info {
+#page-info,
+#epub-info {
     color: black;
+}
+
+#epub-info {
+    width: 32px;
+    text-align: center;
 }
 
 #slider-container {
@@ -218,7 +230,7 @@ label {
 
 #window-button-container {
     display: flex;
-    width: 140px;
+    width: 100px;
     height: 34px;
     margin-top: -2px;
 }
